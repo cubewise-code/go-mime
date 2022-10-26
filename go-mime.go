@@ -1119,10 +1119,19 @@ var mimeTypes = map[string]string{
 
 // TypeByExtension returns the content type based on the extension of the file
 func TypeByExtension(extension string) string {
-	if strings.HasPrefix(extension, ".") {
-		// Remove the period
-		extension = extension[1:]
-	}
+	extension = strings.TrimPrefix(extension, ".")
 	contentType := mimeTypes[strings.ToLower(extension)]
 	return contentType
+}
+
+// ExtensionByType returns the extensions corresponding to a given content mime type
+// by performing a O(N) linear search
+func ExtensionsByType(mime string) []string {
+	var exts []string
+	for extension, contentType := range mimeTypes {
+		if contentType == mime {
+			exts = append(exts, extension)
+		}
+	}
+	return exts
 }
